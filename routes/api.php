@@ -17,19 +17,48 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+//get all users
+Route::get('/users' , function(){
+    $users = DB::table('users')->get();
+    return $users;
+});
+
+//get user per name
 Route::get('/users/{name}', function($name){
     return DB::table('users')->where('name', $name)->first();
-    
 });
 
-Route::get('/recipes_ingredients', function(){
-    return DB::table('recipes_ingredients');
+//add new user
+Route::post('/users', function (Request $request){
+    $name = $request -> input('name');
+    $password = $request -> input('password');
+    $email = $request -> input('email');
+
+    if (DB::table('users')->where('name', $name)-> exists()){
+        return response()->json([
+            'message' => 'User already exists'
+        ], 409);
+    }
+
+    DB::table('users')->insert([
+        'name'=>$name,
+        'password'=>Hash::make($password),
+        'email'=>$email
+    ]);
+
+    return response()->json([
+        'message'=>'User created.'
+    ], 201);
+
 });
 
+//delete user
+Route::delete('/users/{id}', function($id){
+    DB::table('users')->where('id', $id)->delete();
 
-Route::get('/recipes_ingredients/{id}', function($id){
-    return DB::table('recipes_ingredients')->where('id', $id)->first();
-
+    return response()->json([
+        'message'=>'The user has been deleted'
+    ], 200);
 });
-
-
