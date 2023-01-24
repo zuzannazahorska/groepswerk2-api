@@ -33,3 +33,20 @@ Route::get('/recipes_ingredients/{id}', function($id){
 });
 
 
+////////////////// RECIPES //////////////////////////////////////////////////////
+
+//    - get
+
+
+Route::get('/diet_recipe/{id}', function ($id) {
+    $data = DB::table('diet_recipe')
+        ->join('diets', 'diets.id', '=', 'diet_recipe.diet_id')
+        ->join('recipes', 'recipes.id', '=', 'diet_recipe.recipe_id')
+        ->where('diets.id', '=', $id)
+        ->select('diets.name', 'diets.id', 'recipes.name', 'recipes.instruction')
+        ->get();
+    return $data;
+});
+
+
+
