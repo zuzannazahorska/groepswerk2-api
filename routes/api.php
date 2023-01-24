@@ -62,3 +62,10 @@ Route::delete('/users/{id}', function($id){
         'message'=>'The user has been deleted'
     ], 200);
 });
+
+// GET ingredients 
+Route::get ('/ingredients', function(){
+    $ingredients = DB::table('ingredients')-> get();
+    return $ingredients;
+});
+
