@@ -14,28 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-Route::get('/users/{name}', function($name){
-    return DB::table('users')->where('name', $name)->first();
-    
-});
-
-Route::get('/recipes_ingredients', function(){
-    return DB::table('recipes_ingredients');
-});
-
-
-Route::get('/recipes_ingredients/{id}', function($id){
-    return DB::table('recipes_ingredients')->where('id', $id)->first();
-
-});
 
 
 ////////////////// RECIPES //////////////////////////////////////////////////////
 
-//    - get
+//    - get recipe in depending on the type of diet
 
 
 Route::get('/diet_recipe/{id}', function ($id) {
@@ -47,6 +30,11 @@ Route::get('/diet_recipe/{id}', function ($id) {
         ->get();
     return $data;
 });
+  // get all recipes
+
+Route::get('/recipes', function () {
+    return DB::table('recipes')->get();
+    });
 
 
 
