@@ -42,6 +42,7 @@ Route::post('/users', function (Request $request){
         ], 409);
     }
 
+
     DB::table('users')->insert([
         'name'=>$name,
         'password'=>Hash::make($password),
@@ -51,6 +52,8 @@ Route::post('/users', function (Request $request){
     return response()->json([
         'message'=>'User created.'
     ], 201);
+});
+
 
 Route::get('/diet_recipe/{id}', function ($id) {
     $data = DB::table('diet_recipe')
