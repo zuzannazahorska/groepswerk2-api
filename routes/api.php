@@ -14,12 +14,43 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
 
-////////////////// RECIPES //////////////////////////////////////////////////////
+//get all users
+Route::get('/users' , function(){
+    $users = DB::table('users')->get();
+    return $users;
+});
 
-//    - get recipe in depending on the type of diet
+//get user per name
+Route::get('/users/{name}', function($name){
+    return DB::table('users')->where('name', $name)->first();
+});
 
+//add new user
+Route::post('/users', function (Request $request){
+    $name = $request -> input('name');
+    $password = $request -> input('password');
+    $email = $request -> input('email');
+
+    if (DB::table('users')->where('name', $name)-> exists()){
+        return response()->json([
+            'message' => 'User already exists'
+        ], 409);
+    }
+
+    DB::table('users')->insert([
+        'name'=>$name,
+        'password'=>Hash::make($password),
+        'email'=>$email
+    ]);
+
+    return response()->json([
+        'message'=>'User created.'
+    ], 201);
 
 Route::get('/diet_recipe/{id}', function ($id) {
     $data = DB::table('diet_recipe')
@@ -32,6 +63,13 @@ Route::get('/diet_recipe/{id}', function ($id) {
 });
   // get all recipes 
 
+//delete user
+Route::delete('/users/{id}', function($id){
+    DB::table('users')->where('id', $id)->delete();
+    return response()->json([
+        'message'=>'The user has been deleted'
+    ], 200);
+});
 
 Route::get('/recipes', function () {
    return DB::table('recipes')->get();
