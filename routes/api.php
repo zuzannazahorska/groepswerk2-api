@@ -88,7 +88,6 @@ Route::get('/recipes/instructions/{id}', function ($id) {
 
 });
 
-});*/
 
 //get an image of a recipe
 Route::get('/recipes/{id}/image', function($id) {
