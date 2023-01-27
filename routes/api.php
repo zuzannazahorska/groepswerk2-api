@@ -42,6 +42,7 @@ Route::post('/users', function (Request $request){
         ], 409);
     }
 
+
     DB::table('users')->insert([
         'name'=>$name,
         'password'=>Hash::make($password),
@@ -51,17 +52,28 @@ Route::post('/users', function (Request $request){
     return response()->json([
         'message'=>'User created.'
     ], 201);
-
 });
+
+
+Route::get('/diet_recipe/{id}', function ($id) {
+    $data = DB::table('diet_recipe')
+        ->join('diets', 'diets.id', '=', 'diet_recipe.diet_id')
+        ->join('recipes', 'recipes.id', '=', 'diet_recipe.recipe_id')
+        ->where('diets.id', '=', $id)
+        ->select('diets.name', 'diets.id', 'recipes.name', 'recipes.instruction')
+        ->get();
+    return $data;
+});
+  // get all recipes 
 
 //delete user
 Route::delete('/users/{id}', function($id){
     DB::table('users')->where('id', $id)->delete();
-
     return response()->json([
         'message'=>'The user has been deleted'
     ], 200);
 });
+
 
 // GET all ingredients 
 Route::get ('/ingredients', function(){
@@ -114,3 +126,30 @@ Route::get('/ingredients/{name}', function($name){
 //         ->get();
 //     return $ingredients;
 // });
+
+Route::get('/recipes', function () {
+   return DB::table('recipes')->get();
+});
+
+
+Route::get('/recipes/instructions/{id}', function ($id) {
+    $data = DB::table('recipes')
+    ->where('recipes.id', '=', $id)
+       ->select('recipes.instruction')
+        ->get();
+    return $data;
+
+});
+
+
+//get an image of a recipe
+Route::get('/recipes/{id}/image', function($id) {
+    $recipe = DB::table('recipes')->where('id', $id)->first();
+    if($recipe) {
+        $image = $recipe->image;
+        return response()->json(['image' => $image]);
+    }else{
+        return response()->json(['error' => 'recipe not found']);
+    }
+});
+
