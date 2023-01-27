@@ -78,16 +78,11 @@ Route::get('/recipes', function () {
    return DB::table('recipes')->get();
 });
 
-/*Route::get('/recipes/name', function () {
-    $data = DB::table('recipes')
-       ->select('recipes.name')
-        ->get();
-    return $data;
-});
 
-Route::get('/recipes/instructions', function () {
+Route::get('/recipes/instructions/{id}', function ($id) {
     $data = DB::table('recipes')
+    ->where('recipes.id', '=', $id)
        ->select('recipes.instruction')
         ->get();
     return $data;
-});*/
+});
