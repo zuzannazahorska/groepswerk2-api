@@ -85,4 +85,19 @@ Route::get('/recipes/instructions/{id}', function ($id) {
        ->select('recipes.instruction')
         ->get();
     return $data;
+
 });
+
+});*/
+
+//get an image of a recipe
+Route::get('/recipes/{id}/image', function($id) {
+    $recipe = DB::table('recipes')->where('id', $id)->first();
+    if($recipe) {
+        $image = $recipe->image;
+        return response()->json(['image' => $image]);
+    }else{
+        return response()->json(['error' => 'recipe not found']);
+    }
+});
+
