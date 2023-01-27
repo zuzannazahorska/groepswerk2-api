@@ -30,11 +30,23 @@ Route::get('/diet_recipe/{id}', function ($id) {
         ->get();
     return $data;
 });
-  // get all recipes
+  // get all recipes 
+
 
 Route::get('/recipes', function () {
-    return DB::table('recipes')->get();
-    });
+   return DB::table('recipes')->get();
+});
 
+/*Route::get('/recipes/name', function () {
+    $data = DB::table('recipes')
+       ->select('recipes.name')
+        ->get();
+    return $data;
+});
 
-
+Route::get('/recipes/instructions', function () {
+    $data = DB::table('recipes')
+       ->select('recipes.instruction')
+        ->get();
+    return $data;
+});*/
