@@ -52,13 +52,39 @@ Route::post('/users', function (Request $request){
         'message'=>'User created.'
     ], 201);
 
+Route::get('/diet_recipe/{id}', function ($id) {
+    $data = DB::table('diet_recipe')
+        ->join('diets', 'diets.id', '=', 'diet_recipe.diet_id')
+        ->join('recipes', 'recipes.id', '=', 'diet_recipe.recipe_id')
+        ->where('diets.id', '=', $id)
+        ->select('diets.name', 'diets.id', 'recipes.name', 'recipes.instruction')
+        ->get();
+    return $data;
 });
+  // get all recipes 
 
 //delete user
 Route::delete('/users/{id}', function($id){
     DB::table('users')->where('id', $id)->delete();
-
     return response()->json([
         'message'=>'The user has been deleted'
     ], 200);
 });
+
+Route::get('/recipes', function () {
+   return DB::table('recipes')->get();
+});
+
+/*Route::get('/recipes/name', function () {
+    $data = DB::table('recipes')
+       ->select('recipes.name')
+        ->get();
+    return $data;
+});
+
+Route::get('/recipes/instructions', function () {
+    $data = DB::table('recipes')
+       ->select('recipes.instruction')
+        ->get();
+    return $data;
+});*/
