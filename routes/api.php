@@ -63,9 +63,54 @@ Route::delete('/users/{id}', function($id){
     ], 200);
 });
 
-// GET ingredients 
+// GET all ingredients 
 Route::get ('/ingredients', function(){
     $ingredients = DB::table('ingredients')-> get();
     return $ingredients;
+ });   
+ 
+//get ingredient per ingredient 
+Route::get('/ingredients/{name}', function($name){
+    return DB::table('ingredients')->where('name', $name)->first();
 });
 
+
+//Get recipe per ingredient 
+
+// Route::get('/ingredient_recipe/{search}', function($search){
+//     return DB:: table('ingredient_recipe')
+//     ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
+//     ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
+//     ->where('ingredients.name', 'like', '%'.$search.'%')
+//     ->groupBy('ingredients.name')
+//     ->select('ingredients.name', 'ingredients.id','recipes.name','recipes.instruction')
+//     ->get();
+//     return $data;
+//  });   
+ 
+
+// Route::get('/ingredient_recipe/{search}', function($search){
+//     $data = DB::table('ingredient_recipe')
+//      ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
+//      ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id') 
+//      ->where('ingredients.name', 'like', '%'.$search.'%') 
+//      ->select('ingredients.name', 'ingredients.id','recipes.name','recipes.instruction')
+//      ->get();  return response()->json($data);
+//     });
+
+
+// //more ingredients and recipe
+
+// Route::get('/ingredients/{name}', function($name) {
+//     $ingredients = DB::table('ingredient_recipe')
+//         ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
+//         ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
+//         ->select('ingredients.name', 'ingredients.id', 'recipes.name', 'recipes.instruction')
+//         ->where(function($query) use ($name) {
+//             $query->where('ingredients.name', 'like', '%'.$name.'%')
+//                   ->orWhere('ingredients.name', 'like', '%'.$name.'%');
+//         })
+//         ->groupBy('ingredients.name')
+//         ->get();
+//     return $ingredients;
+// });
