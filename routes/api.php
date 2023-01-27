@@ -54,16 +54,29 @@ Route::post('/users', function (Request $request){
     ], 201);
 });
 
-
-Route::get('/diet_recipe/{id}', function ($id) {
+// get recipes based on diet
+Route::get('/diet_recipe/{name}', function ($name) {
     $data = DB::table('diet_recipe')
         ->join('diets', 'diets.id', '=', 'diet_recipe.diet_id')
         ->join('recipes', 'recipes.id', '=', 'diet_recipe.recipe_id')
-        ->where('diets.id', '=', $id)
+        ->where('diets.name', 'like', '%'.$name.'%')
         ->select('diets.name', 'diets.id', 'recipes.name', 'recipes.instruction')
         ->get();
     return $data;
 });
+
+//get recipes based on ingrediens
+Route::get('/ingredient_recipe/{name}', function ($name) {
+    $data = DB::table('ingredient_recipe')
+        ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
+        ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
+        ->where('ingredients.name', 'like', '%'.$name.'%')
+        ->select('recipes.name', 'recipes.id','ingredients.id', 'ingredients.name')
+        ->get();
+    return $data;
+});
+
+
   // get all recipes 
 
 //delete user
@@ -88,7 +101,7 @@ Route::get('/recipes/instructions/{id}', function ($id) {
 
 });
 
-});*/
+
 
 //get an image of a recipe
 Route::get('/recipes/{id}/image', function($id) {
