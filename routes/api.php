@@ -96,7 +96,7 @@ Route::get ('/ingredients', function(){
  
 //get ingredient per ingredient 
 Route::get('/ingredients/{name}', function($name){
-    return DB::table('ingredients')->where('name', $name)->first();
+    return DB::table('ingredients')->where('name', $name)->get();
 });
 
 
