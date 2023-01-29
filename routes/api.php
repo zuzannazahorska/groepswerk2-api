@@ -156,13 +156,24 @@ Route::get('/recipes/instructions/{id}', function ($id) {
 
 
 //get an image of a recipe
+// Route::get('/recipes/{id}/image', function($id) {
+//     $recipe = DB::table('recipes')->where('id', $id)->first();
+    // if($recipe) {
+    //     $image = $recipe->image;
+    //     return response()->json(['image' => $image]);
+    // }else{
+    //     return response()->json(['error' => 'recipe not found']);
+    // }
+//});
+
 Route::get('/recipes/{id}/image', function($id) {
     $recipe = DB::table('recipes')->where('id', $id)->first();
-    if($recipe) {
-        $image = $recipe->image;
-        return response()->json(['image' => $image]);
-    }else{
-        return response()->json(['error' => 'recipe not found']);
-    }
-});
-
+  
+    return response()->json([
+    'instruction' => $recipe->instruction,
+    'id' => $recipe->id,
+    'image' => $recipe->image,
+    ]);
+    
+    });
+   
