@@ -175,3 +175,11 @@ Route::get('/ingredient_user/{user_id}/{list}', function($userId, $listType){
         'message'=>'data added'
     ], 201);
 });
+
+//delete from ingredient_user based on the ingredient's id
+Route::delete('/ingredient_user/{user_id}/{ingredient_id}', function($user_id, $ingredient_id){
+    DB::table('ingredient_user')-> where ('user_id', $user_id)->where('ingredient_id', $ingredient_id) ->delete();
+    return response()->json([
+        'message'=>'The ingredient has been deleted'
+    ], 200);
+});
