@@ -65,16 +65,40 @@ Route::get('/diet_recipe/{name}', function ($name) {
     return $data;
 });
 
-//get recipes based on ingrediens
-Route::get('/ingredient_recipe/{name}', function ($name) {
-    $data = DB::table('ingredient_recipe')
-        ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
-        ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
-        ->where('ingredients.name', 'like', '%'.$name.'%')
-        ->select('recipes.name', 'recipes.id','ingredients.id', 'ingredients.name')
-        ->get();
-    return $data;
-});
+// // // get all ingredient from recipe
+// Route::get('/ingredient_recipe/{id}', function ($id) {
+//     $data = DB::table('ingredient_recipe')
+//         ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
+//         ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
+//         ->where('recipes.id', 'like', '%'.$id.'%')
+//         ->select('recipes.instruction', 'ingredients.id', 'ingredients.name', )
+//         ->get();
+//     return $data;
+// });
+////////////////////////////////////////////////////
+// Route::get('/ingredient_recipe/{id}', function ($id) {
+//     $data = DB::table('ingredient_recipe')
+//         ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
+//         ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
+//         ->where('recipes.id', '=', $id)
+//         ->select('recipes.instruction',  'recipes.name')
+//         ->first();
+
+//     $ingredients = DB::table('ingredient_recipe')
+//         ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
+//         ->where('ingredient_recipe.recipe_id', '=', $id)
+//         ->select('ingredients.name')
+//         ->get();
+
+//     return response()->json([        
+//         'name' => $data->name,        
+//         'instruction' => $data->instruction,        
+//         'ingredients' => $ingredients,
+//         ]);
+// });
+
+ 
+   
 
 
   // get all recipes 
@@ -148,7 +172,7 @@ Route::get('/recipes', function () {
 Route::get('/recipes/instructions/{id}', function ($id) {
     $data = DB::table('recipes')
     ->where('recipes.id', '=', $id)
-       ->select('recipes.instruction')
+       ->select('recipes.instruction', 'recipes.name')
         ->get();
     return $data;
 
