@@ -77,27 +77,7 @@ Route::get('/ingredient_recipe/{name}', function ($name) {
 });
 
 
-////////////////////////////////////////////////////
-// Route::get('/ingredient_recipe/{id}', function ($id) {
-//     $data = DB::table('ingredient_recipe')
-//         ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
-//         ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
-//         ->where('recipes.id', '=', $id)
-//         ->select('recipes.instruction',  'recipes.name')
-//         ->first();
 
-//     $ingredients = DB::table('ingredient_recipe')
-//         ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
-//         ->where('ingredient_recipe.recipe_id', '=', $id)
-//         ->select('ingredients.name')
-//         ->get();
-
-//     return response()->json([        
-//         'name' => $data->name,        
-//         'instruction' => $data->instruction,        
-//         'ingredients' => $ingredients,
-//         ]);
-// });
 
 
 //delete user
@@ -121,32 +101,6 @@ Route::get('/ingredients/{name}', function($name){
 });
 
 
-
-// Route::get('/ingredient_recipe/{search}', function($search){
-//     $data = DB::table('ingredient_recipe')
-//      ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
-//      ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id') 
-//      ->where('ingredients.name', 'like', '%'.$search.'%') 
-//      ->select('ingredients.name', 'ingredients.id','recipes.name','recipes.instruction')
-//      ->get();  return response()->json($data);
-//     });
-
-
-// //more ingredients and recipe
-
-// Route::get('/ingredients/{name}', function($name) {
-//     $ingredients = DB::table('ingredient_recipe')
-//         ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
-//         ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
-//         ->select('ingredients.name', 'ingredients.id', 'recipes.name', 'recipes.instruction')
-//         ->where(function($query) use ($name) {
-//             $query->where('ingredients.name', 'like', '%'.$name.'%')
-//                   ->orWhere('ingredients.name', 'like', '%'.$name.'%');
-//         })
-//         ->groupBy('ingredients.name')
-//         ->get();
-//     return $ingredients;
-// });
 
 Route::get('/recipes', function () {
    return DB::table('recipes')->get();
