@@ -65,16 +65,18 @@ Route::get('/diet_recipe/{name}', function ($name) {
     return $data;
 });
 
-// // // get all ingredient from recipe
-// Route::get('/ingredient_recipe/{id}', function ($id) {
-//     $data = DB::table('ingredient_recipe')
-//         ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
-//         ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
-//         ->where('recipes.id', 'like', '%'.$id.'%')
-//         ->select('recipes.instruction', 'ingredients.id', 'ingredients.name', )
-//         ->get();
-//     return $data;
-// });
+//get recipes based on ingredient
+Route::get('/ingredient_recipe/{name}', function ($name) {
+    $data = DB::table('ingredient_recipe')
+        ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
+        ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
+        ->where('ingredients.name', 'like', '%'.$name.'%')
+        ->select('recipes.name', 'recipes.id', 'recipes.instruction', 'ingredients.name')
+        ->get();
+    return $data;
+});
+
+
 ////////////////////////////////////////////////////
 // Route::get('/ingredient_recipe/{id}', function ($id) {
 //     $data = DB::table('ingredient_recipe')
@@ -97,11 +99,6 @@ Route::get('/diet_recipe/{name}', function ($name) {
 //         ]);
 // });
 
- 
-   
-
-
-  // get all recipes 
 
 //delete user
 Route::delete('/users/{id}', function($id){
@@ -124,19 +121,6 @@ Route::get('/ingredients/{name}', function($name){
 });
 
 
-//Get recipe per ingredient 
-
-// Route::get('/ingredient_recipe/{search}', function($search){
-//     return DB:: table('ingredient_recipe')
-//     ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
-//     ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
-//     ->where('ingredients.name', 'like', '%'.$search.'%')
-//     ->groupBy('ingredients.name')
-//     ->select('ingredients.name', 'ingredients.id','recipes.name','recipes.instruction')
-//     ->get();
-//     return $data;
-//  });   
- 
 
 // Route::get('/ingredient_recipe/{search}', function($search){
 //     $data = DB::table('ingredient_recipe')
@@ -172,32 +156,8 @@ Route::get('/recipes', function () {
 Route::get('/recipes/instructions/{id}', function ($id) {
     $data = DB::table('recipes')
     ->where('recipes.id', '=', $id)
-       ->select('recipes.instruction', 'recipes.name')
+       ->select('recipes.instruction', 'recipes.name', 'recipes.image')
         ->get();
     return $data;
 
 });
-
-
-//get an image of a recipe
-// Route::get('/recipes/{id}/image', function($id) {
-//     $recipe = DB::table('recipes')->where('id', $id)->first();
-    // if($recipe) {
-    //     $image = $recipe->image;
-    //     return response()->json(['image' => $image]);
-    // }else{
-    //     return response()->json(['error' => 'recipe not found']);
-    // }
-//});
-
-Route::get('/recipes/{id}/image', function($id) {
-    $recipe = DB::table('recipes')->where('id', $id)->first();
-  
-    return response()->json([
-    'instruction' => $recipe->instruction,
-    'id' => $recipe->id,
-    'image' => $recipe->image,
-    ]);
-    
-    });
-   
