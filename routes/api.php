@@ -151,3 +151,27 @@ Route::get('/ingredient_user/{user_id}/{list}', function($userId, $listType){
     return $ingredients;
 });
 
+
+ //get ingredients_user
+ Route::get('/ingredient_user', function(){
+    return DB::table('ingredient_user')->get();
+ });
+
+
+ //post to ingredients_user
+ Route::post('/ingredient_user', function (Request $request){
+    $user_id = $request -> input('user_id');
+    $ingredient_id = $request -> input('ingredient_id');
+    $list = $request -> input('list');
+
+
+    DB::table('ingredient_user')->insert([
+        'user_id'=>$user_id,
+        'ingredient_id'=>$ingredient_id,
+        'list'=>$list
+    ]);
+
+    return response()->json([
+        'message'=>'data added'
+    ], 201);
+});
