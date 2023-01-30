@@ -166,3 +166,24 @@ Route::get('/recipes/instructions/{id}', function ($id) {
 Route::get('users/emails/{email}', function($email){
     return DB::table('users')->where('email', $email)->first();
 });
+
+
+//get recipes based on all ingredients of frige
+
+Route::get('/ir/search', function (Request $request) {
+    $search = $request->input('search');
+    $searchArray = explode (' ', $search);
+    $query = DB::table ('ingredient_recipe')
+        ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
+        ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
+        ->select ('ingredients.id','recipes.id','recipes.name','recipes.instruction'); 
+        foreach ($searchArray as $searchWord) {
+          $query = $query->orWhere('ingredients.name','like','%'.$searchWord.'%');
+        }
+     return $query 
+        ->orderBy ('recipes.id','desc')
+        ->get();
+ });
+ 
+
+
