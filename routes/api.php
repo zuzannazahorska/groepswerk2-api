@@ -139,5 +139,15 @@ Route::get('/ir/search', function (Request $request) {
         ->get();
  });
  
+//get ingredients based on type list and user id
+Route::get('/ingredient_user/{user_id}/{list}', function($userId, $listType){
+    $ingredients = DB::table('ingredient_user')
+        ->join('ingredients', 'ingredient_user.ingredient_id', '=', 'ingredients.id' )
+        ->where ('ingredient_user.user_id', $userId)
+        ->where('ingredient_user.list', $listType)
+        ->select('ingredients.id', 'ingredients.name')
+        ->get();
 
+    return $ingredients;
+});
 
