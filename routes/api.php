@@ -117,7 +117,7 @@ Route::get('/recipes/instructions/{id}', function ($id) {
 });
 
 //get a user based on email
-Route::get('users/emails/{email}', function($email){
+Route::get('emails/{email}', function($email){
     return DB::table('users')->where('email', $email)->first();
 });
 
