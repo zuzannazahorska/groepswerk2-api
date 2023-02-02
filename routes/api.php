@@ -117,7 +117,7 @@ Route::get('/recipes/instructions/{id}', function ($id) {
 });
 
 //get a user based on email
-Route::get('users/emails/{email}', function($email){
+Route::get('emails/{email}', function($email){
     return DB::table('users')->where('email', $email)->first();
 });
 
@@ -151,6 +151,7 @@ Route::get('/ingredient_user/{user_id}/{list}', function($userId, $listType){
     return $ingredients;
 });
 
+
 Route::get('recipes/{user_id}/{list_item}', function ($user_id, $list_item) {
     $recipes = DB::table('recipes')
         ->join('ingredient_recipe', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
@@ -163,3 +164,37 @@ Route::get('recipes/{user_id}/{list_item}', function ($user_id, $list_item) {
 
     return response()->json($recipes);
 });
+
+
+ //get ingredients_user
+ Route::get('/ingredient_user', function(){
+    return DB::table('ingredient_user')->get();
+ });
+
+
+ //post to ingredients_user
+ Route::post('/ingredient_user', function (Request $request){
+    $user_id = $request -> input('user_id');
+    $ingredient_id = $request -> input('ingredient_id');
+    $list = $request -> input('list');
+
+
+    DB::table('ingredient_user')->insert([
+        'user_id'=>$user_id,
+        'ingredient_id'=>$ingredient_id,
+        'list'=>$list
+    ]);
+
+    return response()->json([
+        'message'=>'data added'
+    ], 201);
+});
+
+//delete from ingredient_user based on the ingredient's id
+Route::delete('/ingredient_user/{user_id}/{ingredient_id}', function($user_id, $ingredient_id){
+    DB::table('ingredient_user')-> where ('user_id', $user_id)->where('ingredient_id', $ingredient_id) ->delete();
+    return response()->json([
+        'message'=>'The ingredient has been deleted'
+    ], 200);
+});
+
