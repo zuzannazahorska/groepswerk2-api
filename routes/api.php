@@ -36,13 +36,7 @@ Route::post('/users', function (Request $request){
     $password = $request -> input('password');
     $email = $request -> input('email');
 
-    if (DB::table('users')->where('name', $name)-> exists()){
-        return response()->json([
-            'message' => 'User already exists'
-        ], 409);
-    }
-
-
+    
     DB::table('users')->insert([
         'name'=>$name,
         'password'=>Hash::make($password),
@@ -117,8 +111,9 @@ Route::get('/recipes/instructions/{id}', function ($id) {
 });
 
 //get a user based on email
-Route::get('emails/{email}', function($email){
-    return DB::table('users')->where('email', $email)->first();
+Route::get('/emails/{email}', function($email){
+    $user = DB::table('users')->where('email', $email)->first();
+    return response()->json($user);
 });
 
 
