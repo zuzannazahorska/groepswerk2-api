@@ -60,7 +60,7 @@ Route::get('/diet_recipe/{name}', function ($name) {
         ->join('diets', 'diets.id', '=', 'diet_recipe.diet_id')
         ->join('recipes', 'recipes.id', '=', 'diet_recipe.recipe_id')
         ->where('diets.name', 'like', '%'.$name.'%')
-        ->select('diets.name', 'diets.id', 'recipes.name', 'recipes.instruction')
+        ->select('diets.name', 'diets.id', 'recipes.name', 'recipes.image','recipes.instruction')
         ->get();
     return $data;
 });
@@ -71,7 +71,7 @@ Route::get('/ingredient_recipe/{name}', function ($name) {
         ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
         ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
         ->where('ingredients.name', 'like', '%'.$name.'%')
-        ->select('recipes.name', 'recipes.id', 'recipes.instruction', 'ingredients.name')
+        ->select('recipes.name','recipes.name', 'recipes.id','recipes.image', 'recipes.instruction')
         ->get();
     return $data;
 });
@@ -124,20 +124,20 @@ Route::get('users/emails/{email}', function($email){
 
 //get recipes based on all ingredients of frige
 
-Route::get('/ir/search', function (Request $request) {
-    $search = $request->input('search');
-    $searchArray = explode (' ', $search);
-    $query = DB::table ('ingredient_recipe')
-        ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
-        ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
-        ->select ('ingredients.id','recipes.id','recipes.name','recipes.instruction'); 
-        foreach ($searchArray as $searchWord) {
-          $query = $query->orWhere('ingredients.name','like','%'.$searchWord.'%');
-        }
-     return $query 
-        ->orderBy ('recipes.id','desc')
-        ->get();
- });
+// Route::get('/ir/search', function (Request $request) {
+//     $search = $request->input('search');
+//     $searchArray = explode (' ', $search);
+//     $query = DB::table ('ingredient_recipe')
+//         ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
+//         ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
+//         ->select ('ingredients.id','recipes.id','recipes.name','recipes.instruction'); 
+//         foreach ($searchArray as $searchWord) {
+//           $query = $query->orWhere('ingredients.name','like','%'.$searchWord.'%');
+//         }
+//      return $query 
+//         ->orderBy ('recipes.id','desc')
+//         ->get();
+//  });
  
 //get ingredients based on type list and user id
 Route::get('/ingredient_user/{user_id}/{list}', function($userId, $listType){
@@ -151,3 +151,15 @@ Route::get('/ingredient_user/{user_id}/{list}', function($userId, $listType){
     return $ingredients;
 });
 
+Route::get('recipes/{user_id}/{list_item}', function ($user_id, $list_item) {
+    $recipes = DB::table('recipes')
+        ->join('ingredient_recipe', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
+        ->join('ingredient_user', 'ingredient_recipe.ingredient_id', '=', 'ingredient_user.ingredient_id')
+        ->select('recipes.id', 'recipes.name')
+        ->where('ingredient_user.user_id', '=', $user_id)
+        ->where('ingredient_user.list', '=', $list_item)
+        ->groupBy('recipes.id')
+        ->get();
+
+    return response()->json($recipes);
+});
