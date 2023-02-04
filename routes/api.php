@@ -64,14 +64,11 @@ Route::get('/ingredient_recipe/{name}', function ($name) {
     $data = DB::table('ingredient_recipe')
         ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
         ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
-        ->where('ingredients.name', 'like', '%'.$name.'%')
+        ->where('ingredients.name', '=', $name)
         ->select('recipes.name','recipes.name', 'recipes.id','recipes.image', 'recipes.instruction')
         ->get();
     return $data;
 });
-
-
-
 
 
 //delete user
@@ -95,12 +92,12 @@ Route::get('/ingredients/{name}', function($name){
 });
 
 
-
+//get all recipes
 Route::get('/recipes', function () {
    return DB::table('recipes')->get();
 });
 
-
+// get  description of recipe
 Route::get('/recipes/instructions/{id}', function ($id) {
     $data = DB::table('recipes')
     ->where('recipes.id', '=', $id)
@@ -117,22 +114,7 @@ Route::get('/emails/{email}', function($email){
 });
 
 
-//get recipes based on all ingredients of frige
 
-// Route::get('/ir/search', function (Request $request) {
-//     $search = $request->input('search');
-//     $searchArray = explode (' ', $search);
-//     $query = DB::table ('ingredient_recipe')
-//         ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
-//         ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
-//         ->select ('ingredients.id','recipes.id','recipes.name','recipes.instruction'); 
-//         foreach ($searchArray as $searchWord) {
-//           $query = $query->orWhere('ingredients.name','like','%'.$searchWord.'%');
-//         }
-//      return $query 
-//         ->orderBy ('recipes.id','desc')
-//         ->get();
-//  });
  
 //get ingredients based on type list and user id
 Route::get('/ingredient_user/{user_id}/{list}', function($userId, $listType){
@@ -146,7 +128,7 @@ Route::get('/ingredient_user/{user_id}/{list}', function($userId, $listType){
     return $ingredients;
 });
 
-
+//get recipes based on all ingredients of frige
 Route::get('recipes/{user_id}/{list_item}', function ($user_id, $list_item) {
     $recipes = DB::table('recipes')
         ->join('ingredient_recipe', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
