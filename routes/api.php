@@ -155,6 +155,18 @@ Route::get('recipes/{user_id}/{list_item}', function ($user_id, $list_item) {
     $ingredient_id = $request -> input('ingredient_id');
     $list = $request -> input('list');
 
+    //if an item already exists for this user and this list
+    $existing_ingredient = DB::table('ingredient_user')
+        -> where('user_id', $user_id)
+        -> where('ingredient_id', $ingredient_id)
+        -> where('list', $list)
+        -> first();
+
+    if ($existing_ingredient){
+        return response() -> json([
+            'message' => 'Item already exists in the list'
+        ], 400);
+    }
 
     DB::table('ingredient_user')->insert([
         'user_id'=>$user_id,
