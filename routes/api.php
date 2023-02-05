@@ -97,15 +97,33 @@ Route::get('/recipes', function () {
    return DB::table('recipes')->get();
 });
 
-// get  description of recipe
-Route::get('/recipes/instructions/{id}', function ($id) {
-    $data = DB::table('recipes')
-    ->where('recipes.id', '=', $id)
-       ->select('recipes.instruction', 'recipes.name', 'recipes.image')
-        ->get();
-    return $data;
 
+
+// get  description of recipe
+Route::get('/ingr/{id}', function ($id) {
+    $results = DB::table('ingredient_recipe')
+        ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
+        ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
+        ->where('ingredient_recipe.recipe_id', '=', $id)
+        ->select( 'ingredients.name as ingredient_name', 'recipes.name as recipe_name', 'recipes.id', 'recipes.image', 'recipes.instruction')
+        ->get();
+
+    $data = [
+        'recipe_id' => $id,
+        'recipe_name' => $results[0]->recipe_name,
+        'recipe_image' => $results[0]->image,
+        'recipe_instruction' => $results[0]->instruction,
+        'ingredients' => []
+    ];
+
+    foreach ($results as $result) {
+        array_push($data['ingredients'], $result->ingredient_name);
+    }
+
+    return $data;
 });
+
+
 
 //get a user based on email
 Route::get('/emails/{email}', function($email){
