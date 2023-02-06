@@ -54,21 +54,12 @@ Route::get('/diet_recipe/{name}', function ($name) {
         ->join('diets', 'diets.id', '=', 'diet_recipe.diet_id')
         ->join('recipes', 'recipes.id', '=', 'diet_recipe.recipe_id')
         ->where('diets.name',  '=', $name)
-        ->select('diets.name', 'diets.id', 'recipes.name', 'recipes.image','recipes.instruction')
+        ->select('diets.name',  'recipes.id', 'recipes.name', 'recipes.image','recipes.instruction')
         ->get();
     return $data;
 });
 
-//get recipes based on ingredient
-// Route::get('/ingredient_recipe/{name}', function ($name) {
-//     $data = DB::table('ingredient_recipe')
-//         ->join('ingredients', 'ingredients.id', '=', 'ingredient_recipe.ingredient_id')
-//         ->join('recipes', 'recipes.id', '=', 'ingredient_recipe.recipe_id')
-//         ->where('ingredients.name', '=', $name)
-//         ->select('recipes.name','recipes.name', 'recipes.id','recipes.image', 'recipes.instruction')
-//         ->get();
-//     return $data;
-// });
+
 
 //search for recipes 
 Route::get('/recipes/{name}', function ($name) {
